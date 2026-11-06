@@ -1,724 +1,649 @@
 <!DOCTYPE html>
 <html lang="kk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ашық сабақ | Кері байланыс жүйесі</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- QR Code Generator Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ашық сабақ: Кері байланыс жүйесі</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --star: #fbbf24;
+    }
 
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-        }
-        .star-rating i {
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.15s ease;
-        }
-        .star-rating i:hover {
-            transform: scale(1.25);
-        }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 9999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-    </style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top right, #1e1b4b, #0f172a 60%);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(79, 70, 229, 0.2);
+      border: 1px solid rgba(79, 70, 229, 0.4);
+      color: #a5b4fc;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(to right, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    /* Навигациялық қосымшалар (Tabs) */
+    .tabs {
+      display: flex;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 5px;
+      margin-bottom: 24px;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Карточкалар */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      font-size: 1.4rem;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Форма элементтері */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #e2e8f0;
+    }
+
+    input, textarea {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2);
+    }
+
+    /* Жұлдызшамен бағалау */
+    .rating-container {
+      display: flex;
+      gap: 10px;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #475569;
+      margin: 8px 0;
+    }
+
+    .rating-container i.active {
+      color: var(--star);
+      text-shadow: 0 0 12px rgba(251, 191, 36, 0.5);
+    }
+
+    /* Тегтер */
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .tag-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 8px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .tag-chip.active {
+      background: var(--accent);
+      color: #0f172a;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), #6366f1);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Статистика тақтасы */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .stat-card .val {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #38bdf8;
+      margin-bottom: 4px;
+    }
+
+    .stat-card .lbl {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .response-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 12px;
+    }
+
+    .response-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .response-name {
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .response-sub {
+      color: #38bdf8;
+      font-size: 0.85rem;
+    }
+
+    .response-stars {
+      color: var(--star);
+      font-size: 0.9rem;
+    }
+
+    .response-text {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+      margin-top: 8px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    /* QR бөлімі */
+    .qr-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    #qrcode {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      margin-bottom: 16px;
+    }
+
+    .sync-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--success);
+      margin-bottom: 12px;
+    }
+
+    .sync-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+<body>
 
-    <!-- Жоғарғы Навигациялық Панель -->
-    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-100">
-                    <i class="fa-solid fa-graduation-cap text-lg"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-base sm:text-lg leading-tight text-slate-900 tracking-tight">Ашық Сабақ Рефлексиясы</h1>
-                    <p class="text-xs text-slate-500 hidden sm:block">Мұғалімдердің кәсіби кері байланыс порталы</p>
-                </div>
-            </div>
-
-            <!-- Режимді ауыстыру батырмалары -->
-            <div class="flex items-center gap-1.5 p-1 bg-slate-100/90 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold">
-                <button onclick="switchTab('form-view')" id="tab-form-btn" class="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all text-white bg-indigo-600 shadow-xs">
-                    <i class="fa-solid fa-pen-nib"></i>
-                    <span>Сауалнама</span>
-                </button>
-                <button onclick="switchTab('admin-view')" id="tab-admin-btn" class="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all text-slate-600 hover:text-slate-900">
-                    <i class="fa-solid fa-chart-pie"></i>
-                    <span>Нәтижелер</span>
-                    <span id="badge-count" class="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-200 text-slate-700 font-bold">0</span>
-                </button>
-                <button onclick="switchTab('qr-view')" id="tab-qr-btn" class="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all text-slate-600 hover:text-slate-900">
-                    <i class="fa-solid fa-qrcode"></i>
-                    <span class="hidden sm:inline">QR-код</span>
-                </button>
-            </div>
-        </div>
+  <div class="container">
+    <header>
+      <div class="badge"><i class="fa-solid fa-graduation-cap"></i> Ашық сабақ платформысы</div>
+      <h1>Педагогикалық кері байланыс</h1>
+      <p class="subtitle">Әріптестердің пікірі мен бағалау нәтижелерін нақты уақытта қабылдау</p>
     </header>
 
-    <!-- Хабарландыру модалі немесе Toast -->
-    <div id="toast-container" class="fixed top-20 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+    <!-- Табтар -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('formTab')">
+        <i class="fa-solid fa-pen-to-square"></i> Сауалнама
+      </button>
+      <button class="tab-btn" onclick="switchTab('resultsTab')">
+        <i class="fa-solid fa-chart-pie"></i> Нәтижелер (<span id="tabCount">0</span>)
+      </button>
+      <button class="tab-btn" onclick="switchTab('qrTab')">
+        <i class="fa-solid fa-qrcode"></i> Экранға QR-код
+      </button>
+    </div>
 
-    <!-- Негізгі Контент -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10 flex-1 w-full">
-
-        <!-- 1-БӨЛІМ: САУАЛНАМА ФОРМАСЫ (МҰҒАЛІМДЕРГЕ АРНАЛҒАН) -->
-        <section id="form-view" class="transition-all duration-300">
-            <div class="max-w-2xl mx-auto">
-                <!-- Сабақ жайлы инфо карточка -->
-                <div class="bg-gradient-to-br from-indigo-700 via-indigo-600 to-violet-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-indigo-100 mb-8 relative overflow-hidden">
-                    <div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-white/10 blur-xl pointer-events-none"></div>
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-semibold text-indigo-100 mb-3 border border-white/20">
-                        <i class="fa-solid fa-bullhorn text-[11px]"></i> Сабақтан кейінгі бағалау
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">Құрметті әріптес!</h2>
-                    <p class="text-indigo-100 text-sm sm:text-base leading-relaxed opacity-95">
-                        Бүгінгі өткізілген ашық сабақты жетілдіруге бағытталған кәсіби пікіріңіз бен бағаңыз мен үшін өте құнды. Сауалнаманы толтыру 1-2 минут уақытыңызды алады.
-                    </p>
-                </div>
-
-                <!-- Форма блогы -->
-                <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-9 relative">
-                    <form id="feedbackForm" onsubmit="submitFeedback(event)" class="space-y-6">
-                        
-                        <!-- Аты-жөні мен Пәні -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                                    Аты-жөніңіз <span class="text-slate-400 font-normal lowercase">(қалауыңыз бойынша)</span>
-                                </label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                                        <i class="fa-regular fa-user text-sm"></i>
-                                    </div>
-                                    <input type="text" id="teacherName" placeholder="Мыс: Айгүл Серікқызы" 
-                                           class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                                    Пәніңіз / Қызметіңіз
-                                </label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                                        <i class="fa-solid fa-chalkboard-user text-sm"></i>
-                                    </div>
-                                    <input type="text" id="teacherSubject" placeholder="Мыс: Математика пәні мұғалімі" 
-                                           class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 1. Мақсатқа жетуді бағалау (Жұлдызша) -->
-                        <div class="p-5 bg-slate-50/80 rounded-2xl border border-slate-100">
-                            <label class="block text-sm font-bold text-slate-800 mb-1">
-                                1. Сабақтың мақсатына жетуі мен мазмұны <span class="text-rose-500">*</span>
-                            </label>
-                            <p class="text-xs text-slate-500 mb-3">Оқу мақсаты нақты қойылып, түсіндірілді ме?</p>
-                            
-                            <div class="flex items-center gap-3">
-                                <div class="flex items-center text-2xl text-slate-300 star-rating select-none cursor-pointer" id="starsGoalContainer">
-                                    <i class="fa-solid fa-star transition-all p-1" data-val="1" onclick="setRating('goal', 1)"></i>
-                                    <i class="fa-solid fa-star transition-all p-1" data-val="2" onclick="setRating('goal', 2)"></i>
-                                    <i class="fa-solid fa-star transition-all p-1" data-val="3" onclick="setRating('goal', 3)"></i>
-                                    <i class="fa-solid fa-star transition-all p-1" data-val="4" onclick="setRating('goal', 4)"></i>
-                                    <i class="fa-solid fa-star transition-all p-1" data-val="5" onclick="setRating('goal', 5)"></i>
-                                </div>
-                                <span id="goalRatingText" class="text-xs font-semibold text-slate-500 px-2 py-1 bg-white rounded-lg border border-slate-200 shadow-2xs">5 / 5 (Өте жақсы)</span>
-                            </div>
-                            <input type="hidden" id="goalRating" value="5">
-                        </div>
-
-                        <!-- 2. Әдіс-тәсілдер мен оқушылар белсенділігі -->
-                        <div class="p-5 bg-slate-50/80 rounded-2xl border border-slate-100">
-                            <label class="block text-sm font-bold text-slate-800 mb-1">
-                                2. Қолданылған әдіс-тәсілдер мен интерактивтілік <span class="text-rose-500">*</span>
-                            </label>
-                            <p class="text-xs text-slate-500 mb-3">Қай әдістер ерекше ұнады? (бірнешеуін белгілеуге болады)</p>
-                            
-                            <div class="flex flex-wrap gap-2" id="methodsContainer">
-                                <button type="button" onclick="toggleMethod(this)" class="method-chip px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 hover:border-indigo-400 transition-all flex items-center gap-1.5">
-                                    <span>Топтық жұмыс</span>
-                                </button>
-                                <button type="button" onclick="toggleMethod(this)" class="method-chip px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 hover:border-indigo-400 transition-all flex items-center gap-1.5">
-                                    <span>АКТ / Цифрлық құралдар</span>
-                                </button>
-                                <button type="button" onclick="toggleMethod(this)" class="method-chip px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 hover:border-indigo-400 transition-all flex items-center gap-1.5">
-                                    <span>Кері байланыс пен бағалау</span>
-                                </button>
-                                <button type="button" onclick="toggleMethod(this)" class="method-chip px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 hover:border-indigo-400 transition-all flex items-center gap-1.5">
-                                    <span>Саралау тәсілі</span>
-                                </button>
-                                <button type="button" onclick="toggleMethod(this)" class="method-chip px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 hover:border-indigo-400 transition-all flex items-center gap-1.5">
-                                    <span>Ойын элементтері</span>
-                                </button>
-                                <button type="button" onclick="toggleMethod(this)" class="method-chip px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 hover:border-indigo-400 transition-all flex items-center gap-1.5">
-                                    <span>Сыни тұрғыдан ойлау</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- 3. Жалпы бағалау (1-5) -->
-                        <div class="p-5 bg-slate-50/80 rounded-2xl border border-slate-100">
-                            <label class="block text-sm font-bold text-slate-800 mb-1">
-                                3. Сабақтың жалпы өту сапасы <span class="text-rose-500">*</span>
-                            </label>
-                            <p class="text-xs text-slate-500 mb-3">Уақытты үнемдеу, сыныппен қарым-қатынас және атмосфера</p>
-                            
-                            <div class="flex items-center gap-3">
-                                <div class="flex items-center text-2xl text-slate-300 star-rating select-none cursor-pointer" id="starsOverallContainer">
-                                    <i class="fa-solid fa-star transition-all p-1" data-val="1" onclick="setRating('overall', 1)"></i>
-                                    <i class="fa-solid fa-star transition-all p-1" data-val="2" onclick="setRating('overall', 2)"></i>
-                                    <i class="fa-solid fa-star transition-all p-1" data-val="3" onclick="setRating('overall', 3)"></i>
-                                    <i class="fa-solid fa-star transition-all p-1" data-val="4" onclick="setRating('overall', 4)"></i>
-                                    <i class="fa-solid fa-star transition-all p-1" data-val="5" onclick="setRating('overall', 5)"></i>
-                                </div>
-                                <span id="overallRatingText" class="text-xs font-semibold text-slate-500 px-2 py-1 bg-white rounded-lg border border-slate-200 shadow-2xs">5 / 5 (Керемет)</span>
-                            </div>
-                            <input type="hidden" id="overallRating" value="5">
-                        </div>
-
-                        <!-- 4. Ұсыныстар мен тілектер -->
-                        <div>
-                            <label class="block text-sm font-bold text-slate-800 mb-1">
-                                4. Әріптестік ұсыныс, пікір немесе жылы лебіз <span class="text-rose-500">*</span>
-                            </label>
-                            <p class="text-xs text-slate-500 mb-2">Сабақтың қай сәті ұнады? Болашақта нені жетілдіруге болады?</p>
-                            <textarea id="feedbackComment" required rows="4" placeholder="Мысалы: Сабақ өз деңгейінде өтті. Топтық жұмыстағы балалардың белсенділігі өте жоғары болды. Келесі жолы қорытынды уақытын 3 минутқа созсаңыз..."
-                                      class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"></textarea>
-                        </div>
-
-                        <!-- Жіберу түймесі -->
-                        <div class="pt-2">
-                            <button type="submit" id="submitBtn" 
-                                    class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold text-sm sm:text-base shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 transform active:scale-[0.99] transition-all cursor-pointer">
-                                <i class="fa-solid fa-paper-plane text-sm"></i>
-                                <span>Кері байланысты жіберу</span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+    <!-- 1-Таб: Сауалнама формасы -->
+    <div id="formTab" class="tab-content active">
+      <div class="card">
+        <h2><i class="fa-regular fa-clipboard" style="color: #818cf8;"></i> Сабақты бағалау</h2>
+        <form id="feedbackForm">
+          <div class="form-group">
+            <label>Сабақтың жалпы бағасы (Жұлдызшаны таңдаңыз)</label>
+            <div class="rating-container" id="stars">
+              <i class="fa-solid fa-star active" data-rating="1"></i>
+              <i class="fa-solid fa-star active" data-rating="2"></i>
+              <i class="fa-solid fa-star active" data-rating="3"></i>
+              <i class="fa-solid fa-star active" data-rating="4"></i>
+              <i class="fa-solid fa-star active" data-rating="5"></i>
             </div>
-        </section>
+          </div>
 
-        <!-- 2-БӨЛІМ: АДМИН ПАНЕЛЬ / ЖАУАПТАРДЫ КӨРУ КӨРСЕТКІШІ -->
-        <section id="admin-view" class="hidden space-y-6">
-            <!-- Жоғарғы құрал-саймандар панелі -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-xs">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-square-poll-vertical text-indigo-600"></i>
-                        Ашық сабақ нәтижелері
-                    </h2>
-                    <p class="text-xs text-slate-500">Қатысқан мұғалімдердің жауаптары мен талдауы</p>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-2">
-                    <button onclick="exportToCSV()" class="px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white hover:bg-slate-50 text-slate-700 flex items-center gap-1.5 shadow-2xs transition-all">
-                        <i class="fa-solid fa-file-excel text-emerald-600"></i>
-                        <span>Excel (CSV) экспорт</span>
-                    </button>
-                    <button onclick="confirmClearAll()" class="px-3.5 py-2 rounded-xl border border-rose-200 text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 flex items-center gap-1.5 transition-all">
-                        <i class="fa-regular fa-trash-can"></i>
-                        <span>Тазалау</span>
-                    </button>
-                </div>
+          <div class="form-group">
+            <label>Қай әдіс-тәсілдер мен кезеңдер сәтті өтті? (Бирнешеуін таңдауға болады)</label>
+            <div class="tags-container" id="tags">
+              <span class="tag-chip active">Интерактивті әдіс</span>
+              <span class="tag-chip">Топтық жұмыс</span>
+              <span class="tag-chip">Оқушылардың белсенділігі</span>
+              <span class="tag-chip">Уақытты тиімді басқару</span>
+              <span class="tag-chip">АКТ қолданысы</span>
+              <span class="tag-chip">Критериалды бағалау</span>
             </div>
+          </div>
 
-            <!-- Статистикалық карточкалар -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shrink-0">
-                        <i class="fa-solid fa-users"></i>
-                    </div>
-                    <div>
-                        <span class="text-xs font-semibold uppercase text-slate-400">Барлық жауап</span>
-                        <h3 class="text-2xl font-black text-slate-900" id="stat-total-count">0</h3>
-                    </div>
-                </div>
+          <div class="form-group">
+            <label for="strongPoints">Ерекше ұнаған тұсы немесе сәті:</label>
+            <textarea id="strongPoints" rows="2" placeholder="Мысалы: Оқушылардың жауаптарына берілген кері байланыс өте сәтті болды..."></textarea>
+          </div>
 
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-xl shrink-0">
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                    <div>
-                        <span class="text-xs font-semibold uppercase text-slate-400">Жалпы орташа балл</span>
-                        <h3 class="text-2xl font-black text-slate-900" id="stat-avg-rating">0.0</h3>
-                    </div>
-                </div>
+          <div class="form-group">
+            <label for="suggestions">Ұсыныс немесе жылы лебізіңіз:</label>
+            <textarea id="suggestions" rows="2" placeholder="Сабақты одан әрі жақсарту үшін ойыңыз немесе тілегіңіз..."></textarea>
+          </div>
 
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0">
-                        <i class="fa-solid fa-bullseye"></i>
-                    </div>
-                    <div>
-                        <span class="text-xs font-semibold uppercase text-slate-400">Мақсатқа жету деңгейі</span>
-                        <h3 class="text-2xl font-black text-slate-900" id="stat-goal-rating">0.0</h3>
-                    </div>
-                </div>
-
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center text-xl shrink-0">
-                        <i class="fa-solid fa-heart"></i>
-                    </div>
-                    <div>
-                        <span class="text-xs font-semibold uppercase text-slate-400">Қанағаттану %</span>
-                        <h3 class="text-2xl font-black text-slate-900" id="stat-satisfaction">100%</h3>
-                    </div>
-                </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+            <div>
+              <label for="authorName">Аты-жөніңіз (қалауыңызша):</label>
+              <input type="text" id="authorName" placeholder="Мысалы: Айгүл Серікқызы">
             </div>
-
-            <!-- Түскен жауаптар тізімі -->
-            <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
-                <div class="p-5 border-b border-slate-100 flex items-center justify-between">
-                    <h3 class="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-2">
-                        <i class="fa-regular fa-comments text-indigo-600"></i>
-                        Кері байланыстар легі
-                    </h3>
-                    <div class="text-xs text-slate-400">Нақты уақытта жаңартылуда</div>
-                </div>
-
-                <div id="responsesContainer" class="p-5 divide-y divide-slate-100 space-y-4">
-                    <!-- Javascript арқылы жауаптар түседі -->
-                </div>
-
-                <!-- Бос күй (Егер жауап болмаса) -->
-                <div id="emptyState" class="py-16 px-4 text-center">
-                    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center text-2xl">
-                        <i class="fa-regular fa-folder-open"></i>
-                    </div>
-                    <h4 class="font-bold text-slate-700 text-base mb-1">Әзірге жауап түскен жоқ</h4>
-                    <p class="text-xs text-slate-400 max-w-sm mx-auto">
-                        Әріптестеріңіз сауалнаманы толтырған кезде жауаптар лезде осы жерден көрінеді.
-                    </p>
-                </div>
+            <div>
+              <label for="authorSubject">Пәніңіз:</label>
+              <input type="text" id="authorSubject" placeholder="Мысалы: Математика">
             </div>
-        </section>
+          </div>
 
-        <!-- 3-БӨЛІМ: QR-КОД БӨЛІМІ (СЛАЙДҚА ШЫҒАРУҒА) -->
-        <section id="qr-view" class="hidden">
-            <div class="max-w-xl mx-auto bg-white rounded-3xl border border-slate-200 p-6 sm:p-10 text-center shadow-sm">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-xs font-bold text-indigo-600 mb-4">
-                    <i class="fa-solid fa-mobile-screen-button"></i> Интерактивті рефлексия
-                </div>
-                <h2 class="text-2xl font-black text-slate-900 tracking-tight mb-2">Телефонмен QR-кодты сканерлеңіз</h2>
-                <p class="text-slate-500 text-xs sm:text-sm mb-6 max-w-md mx-auto">
-                    Осы парақшаны экранға (интерактивті тақтаға) шығарып қойыңыз. Қатысушы мұғалімдер камерамен сканерлеп, бірден сауалнамаға өтеді.
-                </p>
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <i class="fa-solid fa-paper-plane"></i> Кері байланыс жіберу
+          </button>
+        </form>
+      </div>
+    </div>
 
-                <!-- QR код контейнері -->
-                <div class="inline-block p-4 bg-white rounded-2xl border-2 border-indigo-100 shadow-md mb-6">
-                    <div id="qrcode" class="flex justify-center"></div>
-                </div>
+    <!-- 2-Таб: Нәтижелерді онлайн көру -->
+    <div id="resultsTab" class="tab-content">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h2><i class="fa-solid fa-square-poll-vertical" style="color: #38bdf8;"></i> Барлық жауаптар</h2>
+          <div class="sync-status">
+            <span class="sync-dot"></span> <span id="syncText">Бұлтпен байланысты</span>
+            <button onclick="fetchOnlineFeedbacks()" style="margin-left: 10px; background: rgba(255,255,255,0.1); border:none; color:#fff; padding: 4px 8px; border-radius: 6px; cursor: pointer;">
+              <i class="fa-solid fa-rotate-right"></i> Жаңарту
+            </button>
+          </div>
+        </div>
 
-                <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-xs text-slate-600 flex items-center justify-between gap-2 max-w-md mx-auto">
-                    <span id="currentUrlText" class="truncate font-mono">Сілтеме...</span>
-                    <button onclick="copyCurrentLink()" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 font-semibold text-slate-700 hover:text-indigo-600 shadow-2xs shrink-0 flex items-center gap-1">
-                        <i class="fa-regular fa-copy"></i>
-                        <span>Көшіру</span>
-                    </button>
-                </div>
-            </div>
-        </section>
-    </main>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="val" id="statCount">0</div>
+            <div class="lbl">Жауап бергендер</div>
+          </div>
+          <div class="stat-card">
+            <div class="val" id="statAvg">5.0</div>
+            <div class="lbl">Орташа балл</div>
+          </div>
+        </div>
 
-    <!-- Төменгі деректеме -->
-    <footer class="mt-auto py-6 border-t border-slate-200/80 bg-white text-center text-xs text-slate-400">
-        <p>Педагогтардың кәсіби қоғамдастығына арналған рефлексия платформасы &copy; 2026</p>
-    </footer>
+        <div id="responsesContainer">
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="fa-solid fa-inbox" style="font-size: 2.5rem; margin-bottom: 12px;"></i>
+            <p>Әзірге кері байланыстар түскен жоқ.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <!-- ДЕРЕКТЕРДІ БАСҚАРУ ЖӘНЕ ФУНКЦИОНАЛ ЖАВАСКРИПТ -->
-    <script>
-        // Жауаптарды жергілікті деректер қорында сақтау кілті
-        const STORAGE_KEY = 'open_lesson_feedbacks_data';
+    <!-- 3-Таб: Экранға QR-код -->
+    <div id="qrTab" class="tab-content">
+      <div class="card qr-wrapper">
+        <h2><i class="fa-solid fa-qrcode" style="color: #a855f7;"></i> Телефонмен сканерлеу үшін QR-код</h2>
+        <p style="color: var(--text-muted); margin-bottom: 20px; max-width: 500px;">
+          Бұл бетті проектор немесе тақтаға шығарыңыз. Қатысушылар телефон камерасын бағыттап, бірден сауалнамаға өтеді.
+        </p>
+        <div id="qrcode"></div>
+        <p id="qrUrlDisplay" style="font-size: 0.85rem; color: #94a3b8; word-break: break-all; margin-top: 10px;"></p>
+      </div>
+    </div>
 
-        // Форма бағалау рейтингі (Бастапқы 5 жұлдыз)
-        let ratings = {
-            goal: 5,
-            overall: 5
-        };
+  </div>
 
-        // Түсініктеме мәтіндері
-        const ratingDescriptions = {
-            5: '5 / 5 (Өте жақсы)',
-            4: '4 / 5 (Жақсы)',
-            3: '3 / 5 (Орташа)',
-            2: '2 / 5 (Қанағаттанарлықсыз)',
-            1: '1 / 5 (Нашар)'
-        };
+  <script>
+    // Бұлтты ортақ база (Кез келген телефоннан жіберілген жауап ортақ серверге барады)
+    // Әркімнің жауабы бір жерге жиналуы үшін бірегей тақта ID-сі:
+    const ROOM_KEY = "ashyk_sabaq_" + window.location.host.replace(/[^a-zA-Z0-9]/g, '_');
+    const API_URL = `https://kvdb.io/4y9pA7h1GkG9tHqTnmZ3Xj/${ROOM_KEY}`;
 
-        // Бастапқы жүктелу
-        window.onload = function() {
-            initStars();
+    let currentRating = 5;
+    let feedbacksList = [];
+
+    // 1. Жұлдызшаны басқанда
+    document.querySelectorAll('#stars i').forEach(star => {
+      star.addEventListener('click', () => {
+        currentRating = parseInt(star.dataset.rating);
+        document.querySelectorAll('#stars i').forEach(s => {
+          s.classList.toggle('active', parseInt(s.dataset.rating) <= currentRating);
+        });
+      });
+    });
+
+    // 2. Тегтерді таңдау
+    document.querySelectorAll('.tag-chip').forEach(tag => {
+      tag.addEventListener('click', () => tag.classList.toggle('active'));
+    });
+
+    // 3. Форманы жіберу (Ортақ бұлтқа жазу)
+    document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Жіберілуде...';
+
+      const selectedTags = Array.from(document.querySelectorAll('.tag-chip.active')).map(t => t.innerText);
+      
+      const newEntry = {
+        id: Date.now(),
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        rating: currentRating,
+        tags: selectedTags,
+        strongPoints: document.getElementById('strongPoints').value.trim(),
+        suggestions: document.getElementById('suggestions').value.trim(),
+        name: document.getElementById('authorName').value.trim() || 'Әріптес',
+        subject: document.getElementById('authorSubject').value.trim() || 'Мұғалім'
+      };
+
+      try {
+        // Сервердегі бар деректерді алып, жаңасын қосып қайта сақтаймыз
+        let currentList = [];
+        try {
+          const res = await fetch(API_URL);
+          if (res.ok) {
+            currentList = await res.json();
+            if (!Array.isArray(currentList)) currentList = [];
+          }
+        } catch (_) {}
+
+        currentList.unshift(newEntry);
+
+        await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify(currentList)
+        });
+
+        alert("Кері байланысыңыз сәтті қабылданды! Үлкен рақмет!");
+        document.getElementById('feedbackForm').reset();
+        
+        // Жұлдызшаларды бастапқы 5-ке қайтару
+        currentRating = 5;
+        document.querySelectorAll('#stars i').forEach(s => s.classList.add('active'));
+
+        // Нәтижелер тақтасын жаңарту
+        await fetchOnlineFeedbacks();
+        switchTab('resultsTab');
+      } catch (err) {
+        alert("Жіберу кезінде ақау болды, қайталап көріңіз.");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Кері байланыс жіберу';
+      }
+    });
+
+    // 4. Ортақ бұлттан барлық жауаптарды жүктеп көрсету
+    async function fetchOnlineFeedbacks() {
+      const syncText = document.getElementById('syncText');
+      syncText.innerText = "Жаңартылуда...";
+      try {
+        const res = await fetch(API_URL + `?t=${Date.now()}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            feedbacksList = data;
             renderResponses();
-            generateQRCode();
-            updateStats();
-        };
-
-        // Жұлдызшаларды баптау
-        function initStars() {
-            setRating('goal', 5);
-            setRating('overall', 5);
+          }
         }
+      } catch (e) {
+        console.error(e);
+      } finally {
+        syncText.innerText = "Бұлтпен байланысты";
+      }
+    }
 
-        function setRating(category, score) {
-            ratings[category] = score;
-            const container = document.getElementById(category === 'goal' ? 'starsGoalContainer' : 'starsOverallContainer');
-            const hiddenInput = document.getElementById(category === 'goal' ? 'goalRating' : 'overallRating');
-            const descText = document.getElementById(category === 'goal' ? 'goalRatingText' : 'overallRatingText');
+    function renderResponses() {
+      const container = document.getElementById('responsesContainer');
+      document.getElementById('tabCount').innerText = feedbacksList.length;
+      document.getElementById('statCount').innerText = feedbacksList.length;
 
-            hiddenInput.value = score;
-            descText.textContent = ratingDescriptions[score] || `${score} / 5`;
+      if (feedbacksList.length === 0) {
+        document.getElementById('statAvg').innerText = "0.0";
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="fa-solid fa-inbox" style="font-size: 2.5rem; margin-bottom: 12px;"></i>
+            <p>Әзірге кері байланыстар түскен жоқ.</p>
+          </div>
+        `;
+        return;
+      }
 
-            const stars = container.querySelectorAll('i');
-            stars.forEach((star, index) => {
-                if (index < score) {
-                    star.classList.remove('text-slate-300');
-                    star.classList.add('text-amber-400');
-                } else {
-                    star.classList.remove('text-amber-400');
-                    star.classList.add('text-slate-300');
-                }
-            });
-        }
+      const avg = (feedbacksList.reduce((acc, cur) => acc + (cur.rating || 5), 0) / feedbacksList.length).toFixed(1);
+      document.getElementById('statAvg').innerText = avg;
 
-        // Әдіс-тәсіл таңдау түймелері
-        function toggleMethod(btn) {
-            const isSelected = btn.classList.contains('bg-indigo-600');
-            if (isSelected) {
-                btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
-                btn.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
-            } else {
-                btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
-                btn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
-            }
-        }
+      container.innerHTML = feedbacksList.map(item => `
+        <div class="response-card">
+          <div class="response-header">
+            <div>
+              <span class="response-name">${item.name}</span>
+              <span class="response-sub">(${item.subject}) • ${item.time}</span>
+            </div>
+            <div class="response-stars">
+              ${'★'.repeat(item.rating)}${'☆'.repeat(5 - item.rating)}
+            </div>
+          </div>
+          ${item.tags && item.tags.length ? `
+            <div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px;">
+              ${item.tags.map(t => `<span style="font-size:0.75rem; background:rgba(6,182,212,0.15); color:#22d3ee; padding:2px 8px; border-radius:99px;">${t}</span>`).join('')}
+            </div>
+          ` : ''}
+          ${item.strongPoints ? `<div class="response-text"><strong>Ұнаған тұсы:</strong> ${item.strongPoints}</div>` : ''}
+          ${item.suggestions ? `<div class="response-text" style="margin-top:4px;"><strong>Ұсыныс:</strong> ${item.suggestions}</div>` : ''}
+        </div>
+      `).join('');
+    }
 
-        // Қойындыларды (Tab) ауыстыру
-        function switchTab(viewId) {
-            const views = ['form-view', 'admin-view', 'qr-view'];
-            views.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.classList.add('hidden');
-            });
+    // 5. Табтарды ауыстыру
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
 
-            const activeView = document.getElementById(viewId);
-            if (activeView) activeView.classList.remove('hidden');
+      if (tabId === 'resultsTab') {
+        fetchOnlineFeedbacks();
+      }
+    }
 
-            // Түймелер түсі
-            const btns = {
-                'form-view': 'tab-form-btn',
-                'admin-view': 'tab-admin-btn',
-                'qr-view': 'tab-qr-btn'
-            };
+    // 6. QR-кодты бірден сайттың өзінің сілтемесіне байланыстыру
+    window.addEventListener('load', () => {
+      const siteUrl = window.location.href;
+      document.getElementById('qrUrlDisplay').innerText = siteUrl;
+      new QRCode(document.getElementById("qrcode"), {
+        text: siteUrl,
+        width: 220,
+        height: 220,
+        colorDark : "#0f172a",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+      });
 
-            for (const [key, btnId] of Object.entries(btns)) {
-                const b = document.getElementById(btnId);
-                if (key === viewId) {
-                    b.className = "flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all text-white bg-indigo-600 shadow-xs";
-                } else {
-                    b.className = "flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all text-slate-600 hover:text-slate-900";
-                }
-            }
+      // Алғашқы жауаптарды жүктеу
+      fetchOnlineFeedbacks();
 
-            if (viewId === 'admin-view') {
-                renderResponses();
-                updateStats();
-            }
-        }
-
-        // Кері байланыс деректерін алу
-        function getFeedbacks() {
-            try {
-                const data = localStorage.getItem(STORAGE_KEY);
-                return data ? JSON.parse(data) : [];
-            } catch (e) {
-                return [];
-            }
-        }
-
-        // Кері байланыс сақтау
-        function saveFeedbacks(list) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-            updateStats();
-        }
-
-        // Форманы жіберу оқиғасы
-        function submitFeedback(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('teacherName').value.trim() || 'Анонимді әріптес';
-            const subject = document.getElementById('teacherSubject').value.trim() || 'Мұғалім';
-            const goalScore = parseInt(document.getElementById('goalRating').value);
-            const overallScore = parseInt(document.getElementById('overallRating').value);
-            const comment = document.getElementById('feedbackComment').value.trim();
-
-            // Таңдалған әдістер
-            const activeMethodBtns = document.querySelectorAll('.method-chip.bg-indigo-600');
-            const selectedMethods = Array.from(activeMethodBtns).map(b => b.innerText.trim());
-
-            if (!comment) {
-                showToast('Пікір өрісін толтыруды ұмытпаңыз!', 'warning');
-                return;
-            }
-
-            const newFeedback = {
-                id: 'fb_' + Date.now(),
-                name: name,
-                subject: subject,
-                goalScore: goalScore,
-                overallScore: overallScore,
-                methods: selectedMethods,
-                comment: comment,
-                date: new Date().toLocaleTimeString('kk-KZ', { hour: '2-digit', minute: '2-digit' }) + ', ' + new Date().toLocaleDateString('kk-KZ')
-            };
-
-            const allFeedbacks = getFeedbacks();
-            allFeedbacks.unshift(newFeedback); // Жаңасын басына қосу
-            saveFeedbacks(allFeedbacks);
-
-            // Форманы тазалау
-            document.getElementById('feedbackForm').reset();
-            initStars();
-            document.querySelectorAll('.method-chip').forEach(btn => {
-                btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
-                btn.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
-            });
-
-            showToast('Рақмет! Кері байланысыңыз сәтті қабылданды.', 'success');
-
-            // Нәтижелер бетіне ауыстыру
-            setTimeout(() => {
-                switchTab('admin-view');
-            }, 600);
-        }
-
-        // Жауаптарды визуалды шығару
-        function renderResponses() {
-            const list = getFeedbacks();
-            const container = document.getElementById('responsesContainer');
-            const emptyState = document.getElementById('emptyState');
-
-            if (!container) return;
-
-            container.innerHTML = '';
-
-            if (list.length === 0) {
-                emptyState.classList.remove('hidden');
-                return;
-            } else {
-                emptyState.classList.add('hidden');
-            }
-
-            list.forEach(item => {
-                const card = document.createElement('div');
-                card.className = "pt-4 first:pt-0";
-
-                // Жұлдызшалар HTML
-                let overallStarsHtml = '';
-                for (let i = 1; i <= 5; i++) {
-                    overallStarsHtml += `<i class="fa-solid fa-star text-xs ${i <= item.overallScore ? 'text-amber-400' : 'text-slate-200'}"></i>`;
-                }
-
-                // Таңдалған әдістер тегтері
-                let methodsBadges = '';
-                if (item.methods && item.methods.length > 0) {
-                    methodsBadges = item.methods.map(m => `
-                        <span class="px-2 py-0.5 rounded-md bg-indigo-50 border border-indigo-100 text-[11px] font-medium text-indigo-700">
-                            ${m}
-                        </span>
-                    `).join('');
-                }
-
-                card.innerHTML = `
-                    <div class="bg-slate-50/70 hover:bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200/70 transition-all">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-sm shadow-2xs">
-                                    ${item.name.charAt(0).toUpperCase()}
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-sm text-slate-900 leading-tight">${escapeHtml(item.name)}</h4>
-                                    <span class="text-xs text-slate-500">${escapeHtml(item.subject)}</span>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3 self-end sm:self-auto">
-                                <div class="flex items-center gap-1 bg-white px-2 py-1 rounded-lg border border-slate-200/80 shadow-2xs">
-                                    <span class="text-xs font-bold text-slate-700 mr-1">${item.overallScore}.0</span>
-                                    ${overallStarsHtml}
-                                </div>
-                                <span class="text-[11px] font-medium text-slate-400">${item.date}</span>
-                            </div>
-                        </div>
-
-                        ${methodsBadges ? `<div class="flex flex-wrap gap-1.5 my-2.5">${methodsBadges}</div>` : ''}
-
-                        <p class="text-xs sm:text-sm text-slate-700 bg-white p-3 rounded-xl border border-slate-200/60 leading-relaxed font-normal mt-2">
-                            "${escapeHtml(item.comment)}"
-                        </p>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        // Статистиканы есептеу
-        function updateStats() {
-            const list = getFeedbacks();
-            const total = list.length;
-
-            document.getElementById('stat-total-count').innerText = total;
-            document.getElementById('badge-count').innerText = total;
-
-            if (total === 0) {
-                document.getElementById('stat-avg-rating').innerText = '0.0';
-                document.getElementById('stat-goal-rating').innerText = '0.0';
-                document.getElementById('stat-satisfaction').innerText = '0%';
-                return;
-            }
-
-            const sumOverall = list.reduce((acc, curr) => acc + (curr.overallScore || 0), 0);
-            const sumGoal = list.reduce((acc, curr) => acc + (curr.goalScore || 0), 0);
-
-            const avgOverall = (sumOverall / total).toFixed(1);
-            const avgGoal = (sumGoal / total).toFixed(1);
-            const satisfaction = Math.round((sumOverall / (total * 5)) * 100);
-
-            document.getElementById('stat-avg-rating').innerText = avgOverall;
-            document.getElementById('stat-goal-rating').innerText = avgGoal;
-            document.getElementById('stat-satisfaction').innerText = satisfaction + '%';
-        }
-
-        // QR-код генерациясы
-        function generateQRCode() {
-            const currentUrl = window.location.href;
-            document.getElementById('currentUrlText').innerText = currentUrl;
-
-            const qrContainer = document.getElementById("qrcode");
-            qrContainer.innerHTML = "";
-            new QRCode(qrContainer, {
-                text: currentUrl,
-                width: 190,
-                height: 190,
-                colorDark : "#312e81",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
-        }
-
-        // Сілтемені көшіру
-        function copyCurrentLink() {
-            const textToCopy = window.location.href;
-            const input = document.createElement('input');
-            input.setAttribute('value', textToCopy);
-            document.body.appendChild(input);
-            input.select();
-            document.execCommand('copy');
-            document.body.removeChild(input);
-            showToast('Сілтеме көшірілді!', 'success');
-        }
-
-        // Деректерді Excel/CSV түрінде жүктеу
-        function exportToCSV() {
-            const list = getFeedbacks();
-            if (list.length === 0) {
-                showToast('Экспорттау үшін жауаптар жоқ!', 'warning');
-                return;
-            }
-
-            // UTF-8 BOM қазақша шрифттер (Ә, І, Ң, Ғ, Ү, Ұ, Қ, Ө, Һ) бұзылмауы үшін
-            let csvContent = "\uFEFF";
-            csvContent += "Аты-жөні,Пәні,Мақсатқа жету (1-5),Жалпы баға (1-5),Ерекше ұнаған әдістер,Ұсыныс пен пікір,Уақыты\n";
-
-            list.forEach(item => {
-                const methodsClean = (item.methods || []).join('; ');
-                const cleanComment = (item.comment || '').replace(/"/g, '""');
-                csvContent += `"${item.name}","${item.subject}",${item.goalScore},${item.overallScore},"${methodsClean}","${cleanComment}","${item.date}"\n`;
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `Ашық_сабақ_кері_байланыс_${new Date().toISOString().slice(0, 10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            showToast('Excel файлы жүктелді!', 'success');
-        }
-
-        // Барлық жауаптарды өшіру растауы
-        function confirmClearAll() {
-            const list = getFeedbacks();
-            if (list.length === 0) {
-                showToast('Тізім бос!', 'info');
-                return;
-            }
-
-            // Рұқсат сұрау UI хабарламасы арқылы тазарту
-            if (window.confirm("Барлық жиналған жауаптарды өшіруді растайсыз ба?")) {
-                localStorage.removeItem(STORAGE_KEY);
-                renderResponses();
-                updateStats();
-                showToast('Барлық жауаптар өшірілді.', 'info');
-            }
-        }
-
-        // Toast хабарлама жүйесі
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            
-            const bgClass = type === 'success' ? 'bg-emerald-600 text-white' : 
-                            type === 'warning' ? 'bg-amber-600 text-white' : 
-                            'bg-slate-900 text-white';
-
-            toast.className = `${bgClass} px-4 py-3 rounded-xl shadow-lg text-xs sm:text-sm font-semibold flex items-center gap-2 transform transition-all duration-300 pointer-events-auto opacity-0 translate-y-2`;
-            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}"></i> <span>${message}</span>`;
-
-            container.appendChild(toast);
-
-            // Анимация
-            setTimeout(() => {
-                toast.classList.remove('opacity-0', 'translate-y-2');
-            }, 10);
-
-            // 3 секундтан соң жою
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        // XSS қорғанысы
-        function escapeHtml(text) {
-            if (!text) return '';
-            return text
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-    </script>
+      // Әр 5 секунд сайын жаңа жауап түсті ме деп автоматты тексеріп тұрады
+      setInterval(fetchOnlineFeedbacks, 5000);
+    });
+  </script>
 </body>
 </html>
